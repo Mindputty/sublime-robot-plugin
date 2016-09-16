@@ -61,7 +61,7 @@ class GoToKeywordThread(threading.Thread):
         for folder in self.folders:
             for root, dirs, files in os.walk(folder):
                 for f in files:
-                    if f.endswith('.txt') and f != '__init__.txt':
+                    if f.endswith('.txt') or f.endswith('.robot') and f != '__init__.txt':
                         path = os.path.join(root, f)
                         scanner.scan_without_resources(path, keywords)
 
@@ -120,7 +120,7 @@ class RobotGoToKeywordCommand(sublime_plugin.TextCommand):
 class AutoSyntaxHighlight(sublime_plugin.EventListener):
     def autodetect(self, view):
         # file name can be None if it's a find result view that is restored on startup
-        if (view.file_name() != None and view.file_name().endswith('.txt') and
+        if (view.file_name() != None and view.file_name().endswith('.txt') or view.file_name().endswith('.robot') and
             view.find(detect_robot_regex, 0, sublime.IGNORECASE) != None):
 
             view.set_syntax_file(os.path.join(plugin_dir, "robot.tmLanguage"))
